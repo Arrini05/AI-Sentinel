@@ -1,0 +1,45 @@
+# Core
+streamlit==1.30.0
+
+# Data
+# FIX: numpy 1.24.3 predates NumPy 2.0 and conflicts with TensorFlow 2.21
+# (which needs numpy>=1.26, and in practice resolves to numpy 2.x).
+# Bumping numpy alone isn't enough though -- pandas 2.1.4 and
+# scikit-learn 1.3.2 (below) don't support numpy 2.0 either (pandas added
+# numpy-2 support in 2.2.2; scikit-learn added it in 1.4.2), so they're
+# bumped to the minimum versions that do, to keep the whole stack consistent.
+numpy>=1.26.4,<2.3
+pandas>=2.2.2,<2.3
+scipy>=1.13.0,<1.14
+
+# Machine Learning
+scikit-learn>=1.4.2,<1.6
+xgboost==3.2.0
+# FIX: required by preprocessing.py (SMOTE/ADASYN/SMOTEENN/SMOTETomek) but
+# was missing entirely -> ModuleNotFoundError: No module named 'imblearn'
+imbalanced-learn==0.12.3
+# FIX: required by data_loader.py to read the UNSW-NB15 .parquet files but
+# was missing entirely -> ImportError when loading that dataset
+pyarrow>=14.0.0
+
+# Deep Learning
+# NOTE: tensorflow==2.21.0 does exist on PyPI (released Mar 2026), so this
+# exact pin is fine on its own -- it needs Python 3.10-3.13 (Dockerfile
+# uses 3.11, OK) and numpy>=1.26, which is why the data-stack versions
+# above were bumped together with it.
+tensorflow==2.21.0
+
+# Visualization
+matplotlib==3.8.2
+plotly==5.18.0
+
+# Network Capture
+scapy==2.5.0
+
+# Model Saving
+joblib==1.3.2
+
+# Utilities
+requests==2.31.0
+
+psutil==5.9.8

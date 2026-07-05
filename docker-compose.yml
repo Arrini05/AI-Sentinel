@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+
+  ids:
+    build: .
+    container_name: ai_ids
+
+    ports:
+      - "8501:8501"
+
+    # FIX: live_traffic.py's scapy sniff() (Real NIC capture mode) and
+    # automated_response.py's iptables calls (Block IP / Block Port) both
+    # need raw-socket / netfilter privileges. Without these capabilities,
+    # sniff() raises a silent permission error inside the background
+    # thread and iptables exits non-zero -- both modes appear to "do
+    # nothing" with no visible error in the dashboard.
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+    restart: unless-stopped
